@@ -1,9 +1,9 @@
 run_type:
   load_api: false
   make_dataset: false
-  load_dataset: false
+  load_dataset: true
   train: true
-  compare_result: false
+  compare_result: true
 load_api:
   API_KEY: ''
   save_path: Data/Raw
