@@ -2,26 +2,76 @@
 Predicting League of Legends wins and losses using Lanchester's Law. 
 
 # Table of Contents
-0. [Running Code](#Running-Code)
-1. [Description](#Description)
-2. [Datasets](#Datasets)
-3. [Preprocessing](#Preprocessing)
-4. [EDA](#EDA)
-5. [Classification Models](#Classification-Models)
-6. [Conclusion](#Conclusion)
-7. [About Us](#About-Us)
+0. [Setup and Execution](Setup-and-Execution)
+1. [Description](Description)
+2. [Datasets](Datasets)
+3. [Preprocessing](Preprocessing)
+4. [EDA](EDA)
+5. [Classification Models](Classification-Models)
+6. [Conclusion](Conclusion)
+7. [About Us](About-Us)
 
-## Running Code
-1. **Requirements**
-2. **How to Use**
+# Setup and Execution
 
-## Description
+To install the required packages, please ensure you have Python and pip installed. Then, follow these steps:
+
+1. **Clone the repository**:
+
+    ```bash
+    git clone <repository-url>
+    cd <repository-directory>
+    ```
+
+2. **Install the necessary Python packages**:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+This command will install all the required dependencies listed in the `requirements.txt` file.
+
+3. **(Optional) If you are using a virtual environment, activate it before running the `pip install` command**:
+
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    pip install -r requirements.txt
+    ```
+
+4. **Running the Simulation**
+
+To run the simulation, you can use the `run_simulation.py` script. Before running the script, ensure that you have configured the `.hydra/config.yaml` file according to your needs.
+
+#### Configuring `config.yaml`
+
+The `config.yaml` file contains various parameters that control how the simulation is run. You can customize the following sections to suit your requirements:
+
+- **run_type**: Choose the actions to perform during the simulation, such as loading data from the API, creating datasets, training models, and comparing results.
+- **load_api**: Configure API-related settings, including the API key, data types, tiers, and match limits.
+- **make_dataset**: Specify how datasets should be generated, including the tiers, time lengths, and data types to use.
+- **load_dataset**: Select the types of datasets to load for training and evaluation.
+- **train**: Set the parameters for training models, including the data types, columns, scalers, and training configurations.
+- **param_gridsearch**: Configure hyperparameters for machine learning and neural network models, including grid search settings.
+- **compare_result**: Set this to `true` if you want to compare the results after training.
+
+If you do not want to load data from the API or perform preprocessing, and only want to use preprocessed data for training and result comparison, you can set the `config.yaml` file as follows:
+
+```yaml
+run_type:
+  load_api: false
+  make_dataset: false
+  load_dataset: true
+  train: true
+  compare_result: true
+```
+
+# Description
 - We predicted the wins and losses of the matches, separated by tier. 
 - We used five different data types to predict wins and losses. (Mean, Weighted Mean, Point, Timeseries, Lanchester)
 - We used six different points in time. (5 min, 10 min, 15 min, 20 min, 25 min, 30 min)
 - We used 8 classification models. (LR, SVC, kNN, RF, XGB, RNN, LSTM, CNN_LSTM) 
 
-## Datasets
+# Datasets
 1. **Data Collection**
    - We collected data from ["Riot Developer Portal"](https://developer.riotgames.com/apis).
       > 1. Go to the ["Riot Developer Portal"](https://developer.riotgames.com/apis) and Get your API Key.
@@ -44,7 +94,7 @@ Predicting League of Legends wins and losses using Lanchester's Law.
      >    - For **Damage**, there were four types: *totalDamage*, *physicalDamage*, *magicDamage*, and *trueDamage*, and three types: *Done*, *Taken*, and *ToChampion*, so we selected only *totalDamageDone* and *totalDamageTaken* and removed all others.
      >    - For *minionsKilled*, *jungleMinionsKilled*, and *goldPerSecond*, we removed those variables because they are completely dependent on *xp* and *totalGold*.
 
-## Preprocessing
+# Preprocessing
 The data we collected is in the form of a three-dimensional tensor of the form *(5, 28, t)*, because there are *28 variables* for the *5 players* until *minute t*, when the game ends. However, for general classification, they take *vectors* as input, and for regression neural networks dealing with time series, they take matrices as input. **So we needed to convert the data, which is a tensor in three dimensions, into a vector or matrix.** Below are the five conversion methods we used to convert a three-dimensional tensor to a vector or matrix.
 
 1. **Mean**
@@ -128,7 +178,7 @@ The data we collected is in the form of a three-dimensional tensor of the form *
    - To address these issues, we used the following scaling methods.
       > $$R_{scaled} = \frac{R}{R+B}, \quad B_{scaled} = \frac{B}{R+B} \quad (if \quad R = B = 0, \quad R_{scaled} = B_{scaled} = 0.5)$$
 
-## EDA
+# EDA
    - In this section, we will only show a simple visualization, because we have already applied several preprocessing methods and have a lot of data, it may contain information you don't want.
    - Therefore, we will compare three methods: **Mean**, **Ratio**, and **Lanchester**. We want to compare the values of the four important variables mentioned above for each data point based on the winning and losing teams. 
    - We can't show all 10 tiers, so we've only selected three.
@@ -160,7 +210,7 @@ The data we collected is in the form of a three-dimensional tensor of the form *
    - Beta and Gamma have the clearest differences between the above methods.
    >![Lanchester Mixed](https://github.com/G-Nan/Prediction-LOL/blob/main/Images/Lanchester%20Coefficients%20with%20Mixed%20Model%20by%20winloss.png)
      
-## Classification Models
+# Classification Models
    - We used 5 general classification models and 3 neural network models.
       - 5 General Classification Models : Logistic Regression, Support Vector Machine, K-Nearest Neighbors, Random Forest, XGBoost
       - 3 Neural Network Models : RNN, LSTM, CNN+LSTM
@@ -198,7 +248,7 @@ The data we collected is in the form of a three-dimensional tensor of the form *
            > - Loss Function : BCELoss()
   - We trained all the candidates for each data and selected the one with the lowest validation loss.
 
-## Conclusion
+# Conclusion
   - There are 7986 trained models.
     - Mean : 660
       > Tier : 11 (IRON, BRONZE, SILVER, GOLD, PLATINUM, DIAMOND, MASTER, GRANDMASTER, CHALLENGER, ALL) <br>
@@ -233,7 +283,7 @@ The data we collected is in the form of a three-dimensional tensor of the form *
       > Equations : 3 (Linear, Exponential, Mixed) <br>
 
 
-## About Us
+# About Us
 |<img src="https://github.com/chdaewon.png" width="80">||<img src="https://github.com/G-Nan.png" width="80">|<img src="https://github.com/ddanggu.png" width="80">|
 |:---:|:---:|:---:|:---:|
 |[chdaewon](https://github.com/chdaewon)|Prof. Jeong|[G-Nan](https://github.com/G-Nan)|[ddanggu](https://github.com/ddanggu)|
