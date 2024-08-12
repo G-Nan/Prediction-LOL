@@ -1,0 +1,318 @@
+run_type:
+  load_api: false
+  make_dataset: false
+  load_dataset: false
+  train: true
+  compare_result: false
+load_api:
+  API_KEY: ''
+  save_path: Data/Raw
+  data_type: All
+  list_tier:
+  - CHALLENGER
+  - GRANDMASTER
+  - MASTER
+  - DIAMOND
+  - PLATINUM
+  - EMERALD
+  - GOLD
+  - SILVER
+  - BRONZE
+  - IRON
+  start_matchid: 0
+  count_matchid: 5
+  start_matchlist: 0
+  count_matchlist: 5
+  count_dataset: 1100
+make_dataset:
+  save_path: Data/
+  data_type:
+  - ALL
+  - MEAN
+  - WEIGHTEDMEAN
+  - POINT
+  - TIMESERIES
+  - LANCHESTER
+  list_tier:
+  - CHALLENGER
+  - GRANDMASTER
+  - MASTER
+  - DIAMOND
+  - PLATINUM
+  - EMERALD
+  - GOLD
+  - SILVER
+  - BRONZE
+  - IRON
+  list_time_len:
+  - 5
+  - 10
+  - 15
+  - 20
+  - 25
+  - 30
+load_dataset:
+  data_type:
+  - RAW
+  - ALL
+  - MEAN
+  - WEIGHTEDMEAN
+  - POINT
+  - TIMESERIES
+  - LANCHESTER
+train:
+  data_type:
+  #- MEAN
+  #- WEIGHTEDMEAN
+  #- POINT
+  #- TIMESERIES
+  - LANCHESTER
+  MEAN:
+    list_col:
+    - totalDamageDone
+    - totalDamageTaken
+    - totalGold
+    - xp
+    col_name:
+    - 4col
+    - ALL
+    scaler_type:
+    - SS
+    - RT
+    ALL_tier: Both
+    list_tier:
+    - CHALLENGER
+    - GRANDMASTER
+    - MASTER
+    - DIAMOND
+    - PLATINUM
+    - EMERALD
+    - GOLD
+    - SILVER
+    - BRONZE
+    - IRON
+    list_time_len:
+    - 5
+    - 10
+    - 15
+    - 20
+    - 25
+    - 30
+    rand_size: 800
+  WEIGHTEDMEAN:
+    list_col:
+    - totalDamageDone
+    - totalDamageTaken
+    - totalGold
+    - xp
+    col_name:
+    - 4col
+    - ALL
+    scaler_type:
+    - SS
+    - RT
+    ALL_tier: Both
+    list_tier:
+    - CHALLENGER
+    - GRANDMASTER
+    - MASTER
+    - DIAMOND
+    - PLATINUM
+    - EMERALD
+    - GOLD
+    - SILVER
+    - BRONZE
+    - IRON
+    list_time_len:
+    - 5
+    - 10
+    - 15
+    - 20
+    - 25
+    - 30
+    rand_size: 800
+  POINT:
+    list_col:
+    - totalDamageDone
+    - totalDamageTaken
+    - totalGold
+    - xp
+    col_name:
+    - 4col
+    - ALL
+    scaler_type:
+    - SS
+    - RT
+    ALL_tier: Both
+    list_tier:
+    - CHALLENGER
+    - GRANDMASTER
+    - MASTER
+    - DIAMOND
+    - PLATINUM
+    - EMERALD
+    - GOLD
+    - SILVER
+    - BRONZE
+    - IRON
+    list_time_len:
+    - 5
+    - 10
+    - 15
+    - 20
+    - 25
+    - 30
+    rand_size: 800
+  TIMESERIES:
+    list_col:
+    - totalDamageDone
+    - totalDamageTaken
+    - totalGold
+    - xp
+    col_name:
+    - 4col
+    scaler_type:
+    - SS
+    - RT
+    ALL_tier: All
+    list_tier:
+    - CHALLENGER
+    - GRANDMASTER
+    - MASTER
+    - DIAMOND
+    - PLATINUM
+    - EMERALD
+    - GOLD
+    - SILVER
+    - BRONZE
+    - IRON
+    list_time_len:
+    - 5
+    - 10
+    - 15
+    - 20
+    - 25
+    - 30
+    model_name:
+    - RNN
+    - LSTM
+    - CNN_LSTM
+    rand_size: 800
+  LANCHESTER:
+    list_col:
+    - totalDamageDone
+    - totalDamageTaken
+    - totalGold
+    - xp
+    col_name:
+    - 1col
+    - 4col
+    scaler_type:
+    - SS
+    ALL_tier: All
+    list_tier:
+    - CHALLENGER
+    - GRANDMASTER
+    - MASTER
+    - DIAMOND
+    - PLATINUM
+    - EMERALD
+    - GOLD
+    - SILVER
+    - BRONZE
+    - IRON
+    list_time_len:
+    - 5
+    - 10
+    - 15
+    - 20
+    - 25
+    - 30
+    list_lan_type:
+    - Linear
+    - Exponential
+    - Mixed
+    rand_size: 800
+param_gridsearch:
+  ml:
+    LR:
+      max_iter: 10000
+      C:
+      - 0.01
+      - 0.1
+      - 1
+      - 10
+      - 100
+    SVC:
+      C:
+      - 0.01
+      - 1
+      - 100
+      gamma:
+      - scale
+      - 0.1
+      - 1
+      - 10
+      degree:
+      - 2
+      - 3
+      - 4
+    kNN:
+      n_neighbors:
+      - 3
+      - 5
+      - 7
+      - 9
+      - 11
+    RF:
+      n_estimators:
+      - 100
+      - 200
+      max_depth:
+      - null
+      - 2
+      - 4
+      min_samples_split:
+      - 2
+      - 4
+      min_samples_leaf:
+      - 1
+      - 2
+    XGB:
+      n_estimators:
+      - 100
+      - 150
+      learning_rate:
+      - 0.2
+      max_depth:
+      - 2
+      - 4
+      - 6
+      subsample:
+      - 0.9
+      colsample_bytree:
+      - 0.9
+      reg_alpha:
+      - 0.5
+      - 1
+    SKFold:
+      n_splits: 5
+  nn:
+    batch_size: 256
+    patience: 10
+    num_epochs: 1000
+    lr:
+    - 0.001
+    - 0.0001
+    dropout:
+    - 0
+    - 0.25
+    hidden_size:
+    - 16
+    - 32
+    - 64
+    num_layers:
+    - 2
+    - 4
+    - 8
+compare_result: null

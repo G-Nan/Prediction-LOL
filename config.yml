@@ -1,0 +1,143 @@
+# config.yaml
+
+run_type:
+    load_api: False
+    make_dataset: False
+    load_dataset: False
+    train: True
+    compare_result: False
+  
+load_api:
+    API_KEY: ''                 # Your API KEY
+    save_path: 'Data/Raw'    # Your save path
+    data_type: 'All'            # Type of data
+                                    # Choose one: [PUUID, MATCH_ID, MATCH, TIMELINE, 'ALL'] 
+                                    # If you want to fetch all of them, then input 'All'
+    list_tier: ['CHALLENGER', 'GRANDMASTER', 'MASTER', 'DIAMOND', 'PLATINUM', 'EMERALD', 'GOLD', 'SILVER', 'BRONZE', 'IRON']           
+                                # Tier list of data
+                                    # Possible values: ['CHALLENGER', 'GRANDMASTER', 'MASTER', 'DIAMOND', 'PLATINUM', 'EMERALD', 'GOLD', 'SILVER', 'BRONZE', 'IRON', 'ALL']
+                                    # 'ALL' means a mixture of all tiers
+    start_matchid: 0            # Start point of matchid page
+    count_matchid: 5            # Number of matchid entries to load
+    start_matchlist: 0          # Start point of matchlist page
+    count_matchlist: 5          # Number of matchlist entries to load
+    count_dataset: 1100         # Number of data entries to load
+                                # If you set this variable to 'n', then you will have 4*n datasets for each tier.
+    
+make_dataset:
+    save_path: 'Data/'      # Your save path
+    data_type: ['ALL', 'MEAN', 'WEIGHTEDMEAN', 'POINT', 'TIMESERIES', 'LANCHESTER']          
+                            # Type of data
+                                # Possible values: ['ALL', 'MEAN', 'WEIGHTEDMEAN', 'POINT', 'TIMESERIES', 'LANCHESTER']
+    list_tier: ['CHALLENGER', 'GRANDMASTER', 'MASTER', 'DIAMOND', 'PLATINUM', 'EMERALD', 'GOLD', 'SILVER', 'BRONZE', 'IRON', 'ALL']              
+                            # Same with load_api.tier (Line 16)
+    
+load_dataset:
+    data_type: ['RAW', 'ALL', 'MEAN', 'WEIGHTEDMEAN', 'POINT', 'TIMESERIES', 'LANCHESTER'] 
+                            # Type of data you want to download  
+                                # Possible values: ['RAW', 'ALL', 'MEAN', 'WEIGHTEDMEAN', 'POINT', 'TIMESERIES', 'LANCHESTER']    
+train:
+    data_type: ['TIMESERIES', 'LANCHESTER']
+                            # Type of data 
+                                # Possible values: ['MEAN', 'WEIGHTEDMEAN', 'POINT', 'TIMESERIES', 'LANCHESTER']
+    MEAN:
+        list_col: ['totalDamageDone', 'totalDamageTaken', 'totalGold', 'xp']          
+                                    # Columns you want to use for training
+        col_name: ['4col', 'ALL']   # Type of column you want to training
+                                        # Possible values: ['1col', '4col', 'ALL']
+                                        # '1col' refers to training with 1 columns (Use only timeseries, lanchester)
+                                        # '4col' refers to training with main 4 columns
+                                        # 'ALL' refers to training with all columns
+        scaler_type: ['SS', 'RT']   # Type of scaling method
+                                        # Possible values: ['SS', 'MM', 'RT']
+                                        # 'SS' : Standard scaling
+                                        # 'MM' : Minmax scaling
+                                        # 'RT' : Ratio scaling
+        ALL_tier: 'Both'            #    
+                                        # Choose one: ['True', 'False', 'Both']
+        list_tier: ['CHALLENGER', 'GRANDMASTER', 'MASTER', 'DIAMOND', 'PLATINUM', 'EMERALD', 'GOLD', 'SILVER', 'BRONZE', 'IRON']              
+                                    # Same with load_api.tier (Line 16)
+        list_time_len: [5, 10, 15, 20, 25, 30]   # Time point of training
+                                                # Possible values: [5, 10, 15, 20, 25, 30]
+        rand_size: 800
+    WEIGHTEDMEAN:
+        list_col: ['totalDamageDone', 'totalDamageTaken', 'totalGold', 'xp']          
+                                    # Same with train.TIMESERIES.list_col (Line 76)
+        col_name: ['4col', 'ALL']   # Same with train.MEAN.col_name (Line 53)
+        scaler_type: ['SS', 'RT']   # Same with train.MEAN.scaler_type (Line 58)
+        ALL_tier: 'Both'            # Same with train.MEAN.All_tier (Line 55)
+        list_tier: ['CHALLENGER', 'GRANDMASTER', 'MASTER', 'DIAMOND', 'PLATINUM', 'EMERALD', 'GOLD', 'SILVER', 'BRONZE', 'IRON']              
+                                    # Same with load_api.tier (Line 16)
+        list_time_len: [5, 10, 15, 20, 25, 30]   # Same with train.MEAN.time_len (Line 59)
+        rand_size: 800
+    POINT:
+        list_col: ['totalDamageDone', 'totalDamageTaken', 'totalGold', 'xp']          
+                                    # Same with train.TIMESERIES.list_col (Line 76)
+        col_name: ['4col', 'ALL']   # Same with train.MEAN.col_name (Line 53)
+        scaler_type: ['SS', 'RT']   # Same with train.MEAN.scaler_type (Line 58)
+        ALL_tier: 'Both'            # Same with train.MEAN.All_tier (Line 55)
+        list_tier: ['CHALLENGER', 'GRANDMASTER', 'MASTER', 'DIAMOND', 'PLATINUM', 'EMERALD', 'GOLD', 'SILVER', 'BRONZE', 'IRON']              
+                                    # Same with load_api.tier (Line 16)
+        list_time_len: [5, 10, 15, 20, 25, 30]   # Same with train.MEAN.time_len (Line 59)
+        rand_size: 800
+    TIMESERIES:
+        list_col: ['totalDamageDone', 'totalDamageTaken', 'totalGold', 'xp']          
+                                    # Same with train.TIMESERIES.list_col (Line 76)
+        col_name: ['1col', '4col']  # Same with train.MEAN.col_name (Line 53)
+        scaler_type: ['SS', 'RT']   # Same with train.MEAN.scaler_type (Line 58)
+        ALL_tier: 'Both'            # Same with train.MEAN.All_tier (Line 55)
+        list_tier: ['CHALLENGER', 'GRANDMASTER', 'MASTER', 'DIAMOND', 'PLATINUM', 'EMERALD', 'GOLD', 'SILVER', 'BRONZE', 'IRON']              
+                                    # Same with load_api.tier (Line 16)
+        list_time_len: [5, 10, 15, 20, 25, 30]   # Same with train.MEAN.time_len (Line 59)
+        model_name: ['RNN', 'LSTM', 'CNN_LSTM']
+                                    # Model you want to training
+                                        # Possible values: ['RNN', 'LSTM', 'CNN_LSTM']
+        rand_size: 800                                
+    LANCHESTER:
+        list_col: ['totalDamageDone', 'totalDamageTaken', 'totalGold', 'xp']          
+                                    # Same with train.TIMESERIES.list_col (Line 76)
+        col_name: ['1col', '4col']  # Same with train.MEAN.col_name (Line 53)
+        scaler_type: ['SS', 'RT']   # Same with train.MEAN.scaler_type (Line 58)
+        ALL_tier: 'Both'            # Same with train.MEAN.All_tier (Line 55)
+        list_tier: ['CHALLENGER', 'GRANDMASTER', 'MASTER', 'DIAMOND', 'PLATINUM', 'EMERALD', 'GOLD', 'SILVER', 'BRONZE', 'IRON']              
+                                    # Same with load_api.tier (Line 16)
+        list_time_len: [5, 10, 15, 20, 25, 30]   # Same with train.MEAN.time_len (Line 59)
+        list_lan_type: ['Linear', 'Exponential', 'Mixed']    
+                                    # Type of lanchester type
+                                    # Possible values: ['Linear', 'Exponential', 'Mixed']
+        rand_size: 800                            
+param_gridsearch:
+    ml:
+        LR:
+            max_iter: 10000
+            C: [0.1, 1] #[0.01, 0.1, 1, 10, 100]
+        SVC:
+            C: [1]         #[0.01, 1, 100]
+            gamma: [0.1] #['scale', 0.1, 1, 10]
+            degree: [2] #[2, 3, 4]
+        kNN:
+            n_neighbors: [5] #[3, 5, 7, 9, 11]
+        RF:
+            n_estimators: [100] #[100, 200]
+            max_depth: [2] #[None, 2, 4]
+            min_samples_split: [2] # [2, 4]
+            min_samples_leaf: [1] #[1, 2]
+        XGB:
+            n_estimators: [100] #[100, 150]
+            learning_rate: [0.2]
+            max_depth: [4] #[2, 4, 6]
+            subsample: [0.9]
+            colsample_bytree: [0.9]
+            reg_alpha: [0.5] #[0.5, 1]
+        SKFold:
+            n_splits: 5
+    nn:
+        batch_size: 256
+        patience: 10
+        num_epochs: 1000
+        lr: [1e-4] #[1e-3, 1e-4]
+        dropout: [0.25] #[0, 0.25]
+        hidden_size: [16] #[16, 32]
+        num_layers: [2] #[2, 4]
+compare_result:
+   
