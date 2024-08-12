@@ -62,10 +62,10 @@ load_dataset:
   - LANCHESTER
 train:
   data_type:
-  #- MEAN
-  #- WEIGHTEDMEAN
-  #- POINT
-  #- TIMESERIES
+  - MEAN
+  - WEIGHTEDMEAN
+  - POINT
+  - TIMESERIES
   - LANCHESTER
   MEAN:
     list_col:
