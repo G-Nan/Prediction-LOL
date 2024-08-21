@@ -21,7 +21,10 @@ def data_download(data_type):
             
         url = dic_download_url[dt]
         output = f'Data/{dt}.zip'
-        gdown.download(url, output, quiet = False)
+        try:
+            gdown.download(url, output, quiet = False)
+        except:
+            print(f"Failed to download {dt} data: {e}")
             
         output_dir = output[:-4]
         if not os.path.exists(output_dir):

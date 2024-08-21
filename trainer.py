@@ -1,7 +1,6 @@
 from models import *
 
 import os
-import glob
 import torch
 import pickle
 import numpy as np
@@ -117,32 +116,31 @@ def dataset_ml(df, scaler_name):
     return x_train_scaled, x_test_scaled, y_train, y_test
   
 def dataset_nn(df, list_df, scaler_name):
-
-    if scaler_name == 'SS':
-        scaler = StandardScaler()
-    if scaler_name == 'MM':
-        scaler = MinMaxScaler()
         
     x = np.concatenate(list_df, axis=2)
     y = np.array(df['win'])
         
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state = 3128)
+    x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size = 0.25, random_state = 3128)
     
     x_train_scaled = np.zeros_like(x_train)
     x_test_scaled = np.zeros_like(x_test)
+    x_val_scaled = np.zeros_like(x_val)
+        
     
     if scaler_name in ['SS', 'MM']:
-        scalers = [scaler for _ in range(x_train.shape[2])]
-        
+        scalers = []
+    
         for i in range(x_train.shape[2]):
-            x_train_scaled[:, :, i] = scalers[i].fit_transform(x_train[:, :, i])
-            x_test_scaled[:, :, i] = scalers[i].transform(x_test[:, :, i])
-            
+            scaler = StandardScaler() if scaler_name == 'SS' else MinMaxScaler()
+            x_train_scaled[:, :, i] = scaler.fit_transform(x_train[:, :, i])
+            x_test_scaled[:, :, i] = scaler.transform(x_test[:, :, i])
+            x_val_scaled[:, :, i] = scaler.transform(x_val[:, :, i])
+            scalers.append(scaler)
     else:
         x_train_scaled = x_train
         x_test_scaled = x_test
-    
-    x_train_scaled, x_val_scaled, y_train, y_val = train_test_split(x_train_scaled, y_train, test_size = 0.25, random_state = 3128)
+        x_val_scaled = x_val
     
     x_train_scaled_tensor = torch.FloatTensor(x_train_scaled)
     x_test_scaled_tensor = torch.FloatTensor(x_test_scaled)

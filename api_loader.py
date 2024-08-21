@@ -128,14 +128,9 @@ def request_matchid(api_key, path, start, count, set_tqdm):
         for matchid in match_list:
             f.write(f'{matchid}\n')
                 
-def Load_MatchID(api_key, start, count, tier, tiers, save_path):
-
-    if tier == 'ALL':
-        t = tiers
-    else:
-        t = [tier]
+def Load_MatchID(api_key, start, count, tiers, save_path):
         
-    csv_path_list = ext_path(save_path, t, '.csv')
+    csv_path_list = ext_path(save_path, tiers, '.csv')
 
     pbar_csv_path = tqdm(csv_path_list, position = 0)
     for csv_path in pbar_csv_path:

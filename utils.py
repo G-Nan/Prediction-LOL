@@ -6,7 +6,6 @@ import math
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from sklearn.linear_model import SGDRegressor, Lasso
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -429,6 +428,7 @@ class Make_DataFrame():
             df, df_diff = Make_DataFrame.make_array(df_all, match_id, time_len, col)
             
             if len(df) < 3:
+                print(f"Match ID {match_id}: df has less than 3 rows (len(df) = {len(df)}). Skipping least square in lenear or power model for this match.")
                 continue
             
             for outcome in ['win', 'lose']:
@@ -440,6 +440,7 @@ class Make_DataFrame():
                 list_lsq_2.append([alpha2, beta2, gamma2, res2, 1 if outcome == 'win' else 0])
                 
                 if len(df) < 4:
+                    print(f"Match ID {match_id}: df has less than 4 rows (len(df) = {len(df)}). Skipping least square in mixed model for this match.")
                     continue
                     
                 alpha3, beta3, gamma3, delta3, res3 = Make_DataFrame.least_square_3(df, df_diff, outcome)
@@ -586,9 +587,6 @@ class Make_DataFrame():
 
         invalid_match_ids = df.loc[list_last_index, 'match_id'][last_timestamp < threshold]
         df_t = df[~df['match_id'].isin(invalid_match_ids)]
-        
-        #list_last_index_t = df_t.index[df_t['participantId'] != df_t['participantId'].shift(-1)].tolist()
-        #df_t = df_t.drop(list_last_index_t)
 
         df_t = df_t.loc[round(df_t['timestamp'] / 60000, 1) <= time_len]
         df_t['time'] = round(df_t['timestamp']/60000, 1)

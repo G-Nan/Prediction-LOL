@@ -1,8 +1,8 @@
 run_type:
   load_api: false
   make_dataset: false
-  load_dataset: true
-  train: true
+  load_dataset: false
+  train: false
   compare_result: true
 load_api:
   API_KEY: ''
@@ -62,10 +62,10 @@ load_dataset:
   - LANCHESTER
 train:
   data_type:
-  - MEAN
-  - WEIGHTEDMEAN
-  - POINT
-  - TIMESERIES
+  #- MEAN
+  #- WEIGHTEDMEAN
+  #- POINT
+  #- TIMESERIES
   - LANCHESTER
   MEAN:
     list_col:
@@ -315,4 +315,32 @@ param_gridsearch:
     - 2
     - 4
     - 8
-compare_result: null
+compare_result:
+  result_score: true
+  result_table2: true
+  result_table3: true
+  result_figure123: true
+  result_fig4: true
+  result_fig5: true
+  result_fig6: true
+  result_fig7: true
+  result_predict_time: false
+  result_count: false
+  list_tier:
+  - CHALLENGER
+  - GRANDMASTER
+  - MASTER
+  - DIAMOND
+  - PLATINUM
+  - EMERALD
+  - GOLD
+  - SILVER
+  - BRONZE
+  - IRON
+  list_time_len:
+  - 5
+  - 10
+  - 15
+  - 20
+  - 25
+  - 30
