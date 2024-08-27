@@ -1,8 +1,8 @@
 run_type:
   load_api: false
   make_dataset: false
-  load_dataset: false
-  train: false
+  load_dataset: true
+  train: true
   compare_result: true
 load_api:
   API_KEY: ''
@@ -62,10 +62,10 @@ load_dataset:
   - LANCHESTER
 train:
   data_type:
-  #- MEAN
-  #- WEIGHTEDMEAN
-  #- POINT
-  #- TIMESERIES
+  - MEAN
+  - WEIGHTEDMEAN
+  - POINT
+  - TIMESERIES
   - LANCHESTER
   MEAN:
     list_col:
