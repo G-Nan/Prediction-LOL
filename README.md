@@ -3,9 +3,11 @@ Predicting League of Legends wins and losses using Lanchester's Law.
 
 # Table of Contents
 0. [Setup and Execution](#Setup-and-Execution)
-1. [Datasets](#Datasets)
-4. [EDA](#EDA)
-5. [Classification Models](#Classification-Models)
+1. [Data collection](#Data-collection)
+2. [Preprocessing](#Preprocessing)
+3. [EDA](#EDA)
+4. [Classification Models](#Classification-Models)
+5. [Summary of Model Training Configurations](#Summary-of-Model-Training-Configurations)
 6. [Conclusion](#Conclusion)
 7. [About Us](#About-Us)
 
