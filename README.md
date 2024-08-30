@@ -145,7 +145,7 @@ For the preprocessing section, I will only describe the preprocessing methods us
    - Beta and Gamma are clearly distinguishable. Beta shows a smaller value for the winning team, while Gamma shows a larger value for the winning team.
    > ![Lanchester Linear](https://github.com/G-Nan/Prediction-LOL/blob/main/Images/Lanchester%20Coefficients%20with%20Linear%20Model%20by%20winloss.png)
 
-4. Lanchester Exponential Model
+4. Lanchester Power Model
    - For alpha, it doesn't make much difference.
    - For beta and gamma, it's similar to a linear model.
    > ![Lanchester Exponential](https://github.com/G-Nan/Prediction-LOL/blob/main/Images/Lanchester%20Coefficients%20with%20Exponential%20Model%20by%20winloss.png)
