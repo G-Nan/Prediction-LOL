@@ -420,10 +420,12 @@ def result_predict_time(list_tier, list_time_len, list_col, list_lan_type, ):
                             end_time = time.perf_counter()
                         
                             dic_predict_time[tier][time_len][col][lan_type][model_name][match_id] = end_time - start_time
-
+    
+    pbar_list_tier.close()
+    
     list_predict_time = []
 
-    for tier in pbar_list_tier:
+    for tier in list_tier:
         for time_len in list_time_len:
             for col in list_col + ['4col']:
                 for lan_type in list_lan_type:
@@ -458,3 +460,72 @@ def result_count(list_tier, list_time_len, new_order, new_names):
     pivot_c = pivot_c.loc[new_order]
 
     pivot_c.to_csv('results/count.csv')
+    
+def result_ivp(list_tier, list_time_len, list_col):
+    
+    list_ivp = []
+                
+    pbar_list_tier = tqdm(list_tier, position = 0)
+    for tier in pbar_list_tier:
+        for time_len in list_time_len:
+            for col in list_col:
+                t = np.arange(1, time_len)
+                
+                df_l = pd.read_csv(f'Data/Lanchester/{tier}/df_lsq_1_{col}_{time_len}.csv')
+                df_p = pd.read_csv(f'Data/Lanchester/{tier}/df_lsq_2_{col}_{time_len}.csv')
+                df_m = pd.read_csv(f'Data/Lanchester/{tier}/df_lsq_3_{col}_{time_len}.csv')
+                df_val = pd.read_csv(f'Data/Timeseries/{tier}/df_timeseries_{time_len}_{col}.csv')
+                
+                for i in range(len(df_val)):
+                    pbar_list_tier.set_description(f'{tier}_{time_len}_{col}_{i}/{len(df_val)}')
+                    if i%2 == 1:
+                        continue
+                    match_id = df_val['match_id'][i]
+                    outcome = df_val['win'][i]
+                    
+                    coef_l = np.array(df_l[(df_l['match_id'] == match_id) & (df_l['win'] == outcome)].iloc[:, :-2])[0]
+                    coef_p = np.array(df_p[(df_p['match_id'] == match_id) & (df_p['win'] == outcome)].iloc[:, :-2])[0]
+                    coef_m = np.array(df_m[(df_m['match_id'] == match_id) & (df_m['win'] == outcome)].iloc[:, :-2])[0]
+                                        
+                    W_df = df_val[(df_val['match_id'] == match_id) & (df_val['win'] == outcome)]
+                    L_df = df_val[(df_val['match_id'] == match_id) & (df_val['win'] == outcome)]
+
+                    W_arr = np.array(W_df.iloc[:, 2:time_len+1])[0]
+                    L_arr = np.array(L_df.iloc[:, 2:time_len+1])[0]
+
+                    y0 = [W_arr[0], L_arr[0]]
+
+                    t_span = (1, time_len)
+                    t_eval = np.linspace(1, time_len, time_len)
+
+                    try:
+                        sol_l = solve_ivp(Lan_Linear, t_span, y0, t_eval = t_eval)
+                        list_ivp.append(list(sol_l.y[0]) + [match_id, 0, tier, time_len, col, 'linear'])
+                        list_ivp.append(list(sol_l.y[1]) + [match_id, 1, tier, time_len, col, 'linear'])
+                    except:
+                        list_ivp.append([0] * time_len + [match_id, 0, tier, time_len, col, 'linear'])
+                        list_ivp.append([0] * time_len + [match_id, 1, tier, time_len, col, 'linear'])
+
+                    try:
+                        sol_p = solve_ivp(Lan_Power, t_span, y0, t_eval = t_eval)
+                        list_ivp.append(list(sol_p.y[0]) + [match_id, 0, tier, time_len, col, 'power'])
+                        list_ivp.append(list(sol_p.y[1]) + [match_id, 1, tier, time_len, col, 'power'])
+                    except:
+                        list_ivp.append([0] * time_len + [match_id, 0, tier, time_len, col, 'power'])
+                        list_ivp.append([0] * time_len + [match_id, 1, tier, time_len, col, 'power'])
+
+                    try:
+                        sol_m = solve_ivp(Lan_Mixed, t_span, y0, t_eval = t_eval)
+                        list_ivp.append(list(sol_m.y[0]) + [match_id, 0, tier, time_len, col, 'mixed'])
+                        list_ivp.append(list(sol_m.y[1]) + [match_id, 1, tier, time_len, col, 'mixed'])
+                    except:
+                        list_ivp.append([0] * time_len + [match_id, 0, tier, time_len, col, 'mixed'])
+                        list_ivp.append([0] * time_len + [match_id, 1, tier, time_len, col, 'mixed'])
+         
+    pbar_list_tier.close()
+    
+    col_name = [i for i in range(time_len)] + ['match_id', 'win', 'tier', 'time_len', 'col', 'lan_type']
+
+    df = pd.DataFrame(list_ivp)
+    
+    df.to_csv(f'results/df_ivp.csv', index = False)

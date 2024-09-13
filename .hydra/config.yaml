@@ -310,11 +310,9 @@ param_gridsearch:
     hidden_size:
     - 16
     - 32
-    - 64
     num_layers:
     - 2
     - 4
-    - 8
 compare_result:
   result_score: true
   result_table2: true
@@ -326,6 +324,7 @@ compare_result:
   result_fig7: true
   result_predict_time: false
   result_count: false
+  result_ivp: false
   list_tier:
   - CHALLENGER
   - GRANDMASTER

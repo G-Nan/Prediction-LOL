@@ -361,5 +361,9 @@ def main(cfg: DictConfig):
             print("Counting data entries...")
             result_count(list_tier, list_time_len, new_order, new_names)        
     
+        if cfg.compare_result.result_ivp:
+            print("Solving initial value problem...")
+            result_ivp(list_tier, list_time_len, list_col)
+            
 if __name__ == "__main__":
     main()

@@ -371,7 +371,7 @@ class Make_DataFrame():
         
         alpha, beta, gamma = x[0], x[1], x[2]
                  
-        return alpha, beta, gamma, res
+        return alpha, beta, gamma
         
     def least_square_2(df, df_diff, outcome):
         
@@ -395,7 +395,7 @@ class Make_DataFrame():
         
         alpha, beta, gamma = x[0], x[1], x[2]
         
-        return alpha, beta, gamma, res
+        return alpha, beta, gamma
         
     def least_square_3(df, df_diff, outcome):
         
@@ -410,7 +410,7 @@ class Make_DataFrame():
             
         alpha, beta, gamma, delta = x[0], x[1], x[2], x[3]
                  
-        return alpha, beta, gamma, delta, res
+        return alpha, beta, gamma, delta
 
     def lanchester_lsq(self, time_len, col):
     
@@ -433,24 +433,24 @@ class Make_DataFrame():
             
             for outcome in ['win', 'lose']:
             
-                alpha1, beta1, gamma1, res1 = Make_DataFrame.least_square_1(df, df_diff, outcome)
-                list_lsq_1.append([alpha1, beta1, gamma1, res1, 1 if outcome == 'win' else 0])
+                alpha1, beta1, gamma1 = Make_DataFrame.least_square_1(df, df_diff, outcome)
+                list_lsq_1.append([alpha1, beta1, gamma1, 1 if outcome == 'win' else 0, match_id])
                 
-                alpha2, beta2, gamma2, res2 = Make_DataFrame.least_square_2(df, df_diff, outcome)
-                list_lsq_2.append([alpha2, beta2, gamma2, res2, 1 if outcome == 'win' else 0])
+                alpha2, beta2, gamma2 = Make_DataFrame.least_square_2(df, df_diff, outcome)
+                list_lsq_2.append([alpha2, beta2, gamma2, 1 if outcome == 'win' else 0, match_id])
                 
                 if len(df) < 4:
                     print(f"Match ID {match_id}: df has less than 4 rows (len(df) = {len(df)}). Skipping least square in mixed model for this match.")
                     continue
                     
-                alpha3, beta3, gamma3, delta3, res3 = Make_DataFrame.least_square_3(df, df_diff, outcome)
-                list_lsq_3.append([alpha3, beta3, gamma3, delta3, res3, 1 if outcome == 'win' else 0])
+                alpha3, beta3, gamma3, delta3 = Make_DataFrame.least_square_3(df, df_diff, outcome)
+                list_lsq_3.append([alpha3, beta3, gamma3, delta3, 1 if outcome == 'win' else 0, match_id])
                 
         pbar_list_match_id.close()
         
-        df_lsq_1 = pd.DataFrame(list_lsq_1, columns = [['Alpha', 'Beta', 'Gamma', 'Residuals', 'win']])
-        df_lsq_2 = pd.DataFrame(list_lsq_2, columns = [['Alpha', 'Beta', 'Gamma', 'Residuals', 'win']])
-        df_lsq_3 = pd.DataFrame(list_lsq_3, columns = [['Alpha', 'Beta', 'Gamma', 'Delta', 'Residuals', 'win']])
+        df_lsq_1 = pd.DataFrame(list_lsq_1, columns = [['Alpha', 'Beta', 'Gamma', 'win', 'match_id']])
+        df_lsq_2 = pd.DataFrame(list_lsq_2, columns = [['Alpha', 'Beta', 'Gamma', 'win', 'match_id']])
+        df_lsq_3 = pd.DataFrame(list_lsq_3, columns = [['Alpha', 'Beta', 'Gamma', 'Delta', 'win', 'match_id']])
 
         return [df_lsq_1, df_lsq_2, df_lsq_3]
 
